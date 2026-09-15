@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NeXT Electronics — Shop</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{
+  font-family:'Inter','Segoe UI',system-ui,sans-serif;
+  background:#f0f4ff;color:#1a1a2e;
+  transition:background .3s,color .3s;
+}
+:root{
+  --bg:#f0f4ff;--card-bg:#fff;--text:#1a1a2e;
+  --text-secondary:#555;--border:#d0d7e0;
+  --primary:#6c5ce7;--primary-hover:#5a4bd1;
+  --secondary:#00cec9;--accent:#ffeaa7;
+  --nav-bg:#fff;
+}
+body.dark{--bg:#121212;--card-bg:#1e1e2e;--text:#e0e0e0;--text-secondary:#aaa;--border:#333;--nav-bg:#1a1a2a}
+body.blue{--bg:#e8f0fe;--text:#1a237e;--border:#bbdefb;--primary:#1565c0;--primary-hover:#0d47a1;--secondary:#42a5f5}
+body.green{--bg:#e8f5e9;--text:#1b5e20;--border:#c8e6c9;--primary:#2e7d32;--primary-hover:#1b5e20;--secondary:#66bb6a}
+body.pink{--bg:#fce4ec;--text:#880e4f;--border:#f8bbd0;--primary:#e91e63;--primary-hover:#c2185b;--secondary:#f06292}
+
+.navbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;border-bottom:2px solid var(--border);
+  background:var(--nav-bg);position:sticky;top:0;z-index:100;
+  flex-wrap:wrap;gap:10px;
+}
+.logo-container{display:flex;align-items:center;gap:12px}
+.logo-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:900;color:#fff;
+}
+.logo-text{
+  font-size:22px;font-weight:900;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-text small{font-size:11px;-webkit-text-fill-color:var(--text-secondary);display:block;letter-spacing:1px}
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{
+  background:var(--card-bg);border:1px solid var(--border);color:var(--text);
+  padding:7px 14px;border-radius:30px;cursor:pointer;font-size:13px;font-weight:600;
+  text-decoration:none;transition:.15s;
+}
+.btn:hover{border-color:var(--primary);color:var(--primary)}
+.theme-select{
+  background:var(--card-bg);border:1px solid var(--border);color:var(--text);
+  padding:6px 12px;border-radius:30px;font-size:13px;cursor:pointer;
+}
+.hero{
+  text-align:center;padding:48px 20px 24px;max-width:800px;margin:0 auto;
+}
+.hero h1{font-size:38px;font-weight:900;margin-bottom:10px}
+.hero h1 span{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero p{color:var(--text-secondary);font-size:16px;line-height:1.6}
+.section-title{
+  max-width:1320px;margin:36px auto 16px;padding:0 20px;
+  font-size:22px;font-weight:800;
+}
+.grid{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:18px;
+  max-width:1340px;margin:0 auto;padding:0 20px 40px;
+}
+.card{
+  background:var(--card-bg);border:2px solid var(--border);
+  border-radius:18px;padding:18px 14px 20px;width:240px;
+  text-align:center;transition:.2s;
+  box-shadow:0 4px 12px rgba(0,0,0,.04);
+  display:flex;flex-direction:column;
+}
+.card:hover{
+  border-color:var(--primary);transform:translateY(-4px);
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+.card .icon{font-size:44px;display:block;margin-bottom:6px}
+.card h3{font-size:16px;margin-bottom:2px}
+.card .desc{
+  font-size:11px;color:var(--text-secondary);line-height:1.4;
+  margin:6px 0 8px;min-height:70px;text-align:left;padding:0 4px;
+}
+.card .price{font-size:22px;font-weight:800;margin:4px 0;color:var(--primary)}
+.card .price small{font-size:12px;color:var(--text-secondary);font-weight:500}
+.add-btn{
+  background:var(--primary);color:#fff;border:none;
+  padding:8px 16px;border-radius:40px;font-weight:700;
+  cursor:pointer;width:100%;transition:.15s;font-size:13px;
+  margin-top:auto;
+}
+.add-btn:hover{background:var(--primary-hover)}
+footer{
+  text-align:center;padding:24px;
+  border-top:2px solid var(--border);color:var(--text-secondary);font-size:13px;
+}
+</style>
+</head>
+<body>
+
+    <img src ="./images/trump.png" width ="200" height="200">
+
+<div class="navbar">
+  <div class="logo-container">
+    <div class="logo-icon">E</div>
+    <div class="logo-text">NeXT Electronics<small>SHOP</small></div>
+  </div>
+  <div class="controls">
+    <select class="theme-select" onchange="document.body.className=this.value">
+      <option value="">🌈 Default</option>
+      <option value="dark">🌙 Dark</option>
+      <option value="blue">💙 Blue</option>
+      <option value="green">💚 Green</option>
+      <option value="pink">💗 Pink</option>
+    </select>
+    <a class="btn" href="electronics_cart.html">🛒 View Cart</a>
+    <a class="btn" href="electronics_reviews.html">⭐ Reviews</a>
+  </div>
+</div>
+
+<section class="hero">
+  <h1><span>NeXT Electronics</span> — Premium Gadgets</h1>
+  <p>Earbuds · Headphones · Tablets · Computers · Phones · Mini Phones · Displays</p>
+</section>
+
+<div class="section-title">🎧 Wireless Earbuds</div>
+<div class="grid" id="earbudGrid"></div>
+
+<div class="section-title">🎧 Over-Ear Headphones</div>
+<div class="grid" id="headphoneGrid"></div>
+
+<div class="section-title">📱 Tablets</div>
+<div class="grid" id="tabletGrid"></div>
+
+<div class="section-title">💻 Computers & Laptops</div>
+<div class="grid" id="computerGrid"></div>
+
+<div class="section-title">📱 Smartphones</div>
+<div class="grid" id="phoneGrid"></div>
+
+<div class="section-title">📟 Mini Phones</div>
+<div class="grid" id="miniPhoneGrid"></div>
+
+<div class="section-title">🖥️ Monitors & Displays</div>
+<div class="grid" id="displayGrid"></div>
+
+<footer>© 2026 NeXT Electronics — Powering your digital life.</footer>
+
+<script>
+// Products with longer descriptions
+const products = {
+  earbuds: [
+    {id:'eb1',icon:'🎧',name:'NeXT Buds Lite',desc:'Compact wireless earbuds with 6hr battery. IPX4 sweat resistant. Perfect for daily commute and casual listening.',price:29.99},
+    {id:'eb2',icon:'🎧',name:'NeXT Buds Pro',desc:'Active noise cancelling earbuds with transparency mode. 8hr playback, wireless charging case. Premium sound quality.',price:79.99},
+    {id:'eb3',icon:'🎧',name:'NeXT Buds Sport',desc:'Waterproof IPX7 rated earbuds with ear hooks. Secure fit for running and gym. 10hr battery life.',price:49.99},
+    {id:'eb4',icon:'🎧',name:'NeXT Buds Max',desc:'Hi-Res audio certified earbuds with LDAC support. Adaptive ANC, 11mm drivers, 12hr battery. Studio-grade experience.',price:129.99},
+    {id:'eb5',icon:'🎧',name:'NeXT Buds Mini',desc:'Ultra-compact design smaller than a coin. 5hr battery, USB-C fast charge. Great backup pair for travel.',price:33.99},
+  ],
+  headphones: [
+    {id:'hp1',icon:'🎧',name:'NeXT Headphones Lite',desc:'Lightweight on-ear headphones with plush cushions. 20hr battery, foldable design. Ideal for home office.',price:49.99},
+    {id:'hp2',icon:'🎧',name:'NeXT Headphones Pro',desc:'Studio monitor headphones with 50mm drivers. Closed-back design for accurate monitoring. Detachable cable included.',price:119.99},
+    {id:'hp3',icon:'🎧',name:'NeXT Headphones ANC',desc:'Premium ANC over-ear headphones with 40dB noise reduction. 30hr battery, multipoint Bluetooth 5.3.',price:194.99},
+    {id:'hp4',icon:'🎧',name:'NeXT Headphones Gaming',desc:'RGB gaming headset with 7.1 surround sound. Noise-cancelling mic, memory foam ear cups. Works on PC/PS/Xbox.',price:84.99},
+    {id:'hp5',icon:'🎧',name:'NeXT Headphones Wireless',desc:'Bluetooth 5.2 over-ear headphones with aptX HD. 40hr playback, built-in mic, USB-C charging. Travel-friendly.',price:64.99},
+  ],
+  tablets: [
+    {id:'tb1',icon:'📱',name:'NeXT Tab 8"',desc:'8-inch HD display tablet perfect for kids and reading. 3GB RAM, 32GB storage, Android OS. Lightweight 300g.',price:174.99},
+    {id:'tb2',icon:'📱',name:'NeXT Tab 10"',desc:'10.1-inch FHD tablet with 4GB RAM and 64GB storage. Dual speakers, 5MP cameras. Great for streaming and notes.',price:289.99},
+    {id:'tb3',icon:'📱',name:'NeXT Tab Pro 11"',desc:'11-inch 2K display with stylus support. 8GB RAM, 128GB storage. Professional grade for artists and productivity.',price:489.99},
+    {id:'tb4',icon:'📱',name:'NeXT Tab Mini 7"',desc:'Ultra-portable 7-inch mini tablet. 2GB RAM, 16GB storage. Perfect for GPS, music control, and quick browsing.',price:124.99},
+    {id:'tb5',icon:'📱',name:'NeXT Tab Ultra 12"',desc:'12.4-inch AMOLED flagship tablet. 12GB RAM, 256GB storage, 5G optional. Keyboard cover sold separately.',price:689.99},
+  ],
+  computers: [
+    {id:'pc1',icon:'💻',name:'NeXT Book 13"',desc:'13.3-inch thin laptop with Intel i5, 8GB RAM, 256GB SSD. Full HD display, 8hr battery. Silver aluminum chassis.',price:539.99},
+    {id:'pc2',icon:'💻',name:'NeXT Book Pro 14"',desc:'14-inch 2.8K OLED laptop with i7, 16GB RAM, 512GB SSD. Thunderbolt 4, backlit keyboard. For creators.',price:989.99},
+    {id:'pc3',icon:'💻',name:'NeXT Desktop Mini',desc:'Compact desktop PC with Ryzen 5, 8GB RAM, 256GB SSD. WiFi 6, dual HDMI. Mountable behind monitor.',price:439.99},
+    {id:'pc4',icon:'💻',name:'NeXT Workstation',desc:'High-end workstation with Xeon CPU, 32GB ECC RAM, RTX A4000. 1TB NVMe SSD. Certified for CAD and rendering.',price:1879.99},
+    {id:'pc5',icon:'💻',name:'NeXT Gaming Rig',desc:'RTX 4070 gaming desktop with i7, 16GB DDR5, 1TB SSD. RGB cooling, 750W PSU. Runs all modern games at high settings.',price:1579.99},
+  ],
+  phones: [
+    {id:'ph1',icon:'📱',name:'NeXT Phone SE',desc:'Affordable 5G smartphone with 6.1-inch LCD. 4GB RAM, 64GB storage, 12MP camera. Clean Android experience.',price:339.99},
+    {id:'ph2',icon:'📱',name:'NeXT Phone 12',desc:'6.5-inch AMOLED mid-range phone. 6GB RAM, 128GB storage, 48MP triple camera. 5000mAh battery lasts 2 days.',price:529.99},
+    {id:'ph3',icon:'📱',name:'NeXT Phone Pro',desc:'Flagship 6.7-inch LTPO display. 8GB RAM, 256GB storage, 108MP camera with OIS. IP68 water resistant.',price:779.99},
+    {id:'ph4',icon:'📱',name:'NeXT Phone Ultra',desc:'Premium titanium-frame phone with 6.9-inch 120Hz display. 12GB RAM, 512GB storage, 200MP zoom camera.',price:1069.99},
+    {id:'ph5',icon:'📱',name:'NeXT Phone Fold',desc:'Foldable 7.6-inch inner display. 12GB RAM, 256GB storage, triple rear camera. Ultra-thin glass, IPX8 rating.',price:1279.99},
+  ],
+  miniPhones: [
+    {id:'mp1',icon:'📟',name:'NeXT Mini Phone 1',desc:'3-inch compact phone with physical keypad. 4G LTE, basic camera, MP3 player. Ideal for seniors and minimalists.',price:74.99},
+    {id:'mp2',icon:'📟',name:'NeXT Mini Phone 2',desc:'4-inch touchscreen mini smartphone. 3GB RAM, 32GB storage, Android Go. Fits in any pocket comfortably.',price:164.99},
+    {id:'mp3',icon:'📟',name:'NeXT Mini Phone Pro',desc:'4.5-inch mini phone with 48MP camera. 4GB RAM, 64GB storage. Waterdrop notch, face unlock. Compact powerhouse.',price:224.99},
+    {id:'mp4',icon:'📟',name:'NeXT Mini Phone Retro',desc:'Flip-style retro mini phone with 2.8-inch external and 4-inch internal display. 4G, dual SIM, nostalgic design.',price:114.99},
+    {id:'mp5',icon:'📟',name:'NeXT Mini Phone 5G',desc:"World's smallest 5G smartphone at 4.2 inches. 6GB RAM, 128GB storage, 64MP camera. Full Android.",price:334.99},
+  ],
+  displays: [
+    {id:'dp1',icon:'🖥️',name:'NeXT Display 24"',desc:'24-inch Full HD IPS monitor. 75Hz refresh rate, VESA mountable. Built-in speakers, HDMI+VGA ports. Office essential.',price:214.99},
+    {id:'dp2',icon:'🖥️',name:'NeXT Display 27"',desc:'27-inch QHD 1440p monitor with 165Hz. 1ms response, HDR10, FreeSync. Great for gaming and creative work.',price:374.99},
+    {id:'dp3',icon:'🖥️',name:'NeXT Display 32"',desc:'32-inch 4K UHD IPS panel with 95% DCI-P3. USB-C 65W PD, height adjustable stand. Professional photo editing.',price:659.99},
+    {id:'dp4',icon:'🖥️',name:'NeXT Display Ultrawide',desc:'34-inch 21:9 ultrawide curved monitor. 3440x1440, 144Hz, 1ms. Immersive for sim racing and multitasking.',price:839.99},
+    {id:'dp5',icon:'🖥️',name:'NeXT Display Portable',desc:'15.6-inch portable USB-C monitor. 1080p, 60Hz, touchscreen option. Thin 7mm, lightweight 680g. Perfect laptop companion.',price:254.99},
+  ],
+};
+
+function addToCart(id){
+  let cart = JSON.parse(localStorage.getItem('ne_cart')||'{}');
+  const all = [...Object.values(products).flat()];
+  const p = all.find(x=>x.id===id);
+  if(!p)return;
+  if(cart[id]) cart[id].qty++;
+  else cart[id]={id:p.id,icon:p.icon,name:p.name,desc:p.desc.substring(0,40)+'...',price:p.price,qty:1};
+  localStorage.setItem('ne_cart',JSON.stringify(cart));
+  alert(p.name+' added to cart!');
+}
+
+function renderProducts(){
+  const map={
+    earbudGrid:products.earbuds,
+    headphoneGrid:products.headphones,
+    tabletGrid:products.tablets,
+    computerGrid:products.computers,
+    phoneGrid:products.phones,
+    miniPhoneGrid:products.miniPhone,
+    displayGrid:products.displays,
+  };
+  for(const [gridId,items] of Object.entries(map)){
+    document.getElementById(gridId).innerHTML=items.map(p=>`
+      <div class="card">
+        <span class="icon">${p.icon}</span>
+        <h3>${p.name}</h3>
+        <div class="desc">${p.desc}</div>
+        <div class="price">$${p.price.toFixed(2)} <small>USD</small></div>
+        <button class="add-btn" onclick="addToCart('${p.id}')">Add to Cart</button>
+      </div>
+    `).join('');
+  }
+}
+renderProducts();
+</script>
+</body>
+</html>

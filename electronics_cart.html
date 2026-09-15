@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cart — NeXT Electronics</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{
+  font-family:'Inter','Segoe UI',sans-serif;
+  background:#f0f4ff;color:#1a1a2e;padding:30px 16px;
+}
+.container{max-width:760px;margin:0 auto}
+.back-link{color:#6c5ce7;text-decoration:none;font-size:14px;display:inline-block;margin-bottom:16px}
+h1{font-size:30px;font-weight:900;margin-bottom:6px}
+.subtitle{color:#555;font-size:15px;margin-bottom:24px}
+.card{
+  background:#fff;border:2px solid #d0d7e0;border-radius:18px;
+  padding:24px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,.04);
+}
+.card h2{font-size:18px;margin-bottom:16px}
+.cart-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid #d0d7e0;
+}
+.cart-item .info{flex:1}
+.cart-item .info .name{font-weight:700;font-size:14px}
+.cart-item .info .sub{font-size:12px;color:#555}
+.qty-controls{display:flex;gap:8px;align-items:center;margin:0 10px}
+.qty-controls button{
+  background:#fff;border:1px solid #d0d7e0;color:#1a1a2e;
+  width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:14px;
+}
+.line-total{font-weight:700;font-size:14px;min-width:55px;text-align:right;color:#6c5ce7}
+.remove-btn{background:none;border:none;color:#f85149;cursor:pointer;font-size:12px;margin-top:4px}
+.cart-empty{text-align:center;color:#555;padding:40px 20px}
+.total-row{display:flex;justify-content:space-between;font-size:22px;font-weight:800;margin-top:12px;padding-top:12px;border-top:2px solid #d0d7e0;color:#6c5ce7}
+input{
+  width:100%;padding:11px 14px;border-radius:10px;
+  border:2px solid #d0d7e0;font-size:14px;margin-bottom:14px;outline:none;
+}
+input:focus{border-color:#6c5ce7}
+label{display:block;font-size:13px;color:#555;margin-bottom:4px}
+.pay-btn{
+  width:100%;padding:16px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,#6c5ce7,#00cec9);
+  color:#fff;font-weight:800;font-size:17px;cursor:pointer;margin-top:8px;
+}
+.pay-btn:hover{opacity:.88}
+.pay-btn:disabled{opacity:.35;cursor:not-allowed}
+.success-screen{display:none;text-align:center;padding:40px 20px}
+.success-screen.show{display:block}
+.success-screen .check{font-size:72px;color:#2e7d32;margin-bottom:16px}
+.success-screen h2{font-size:28px;margin-bottom:10px}
+.order-num{background:#eee;padding:10px 20px;border-radius:40px;font-weight:700;display:inline-block;margin:14px 0}
+.success-screen p{color:#555;font-size:14px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="electronics_shop.html">← Back to Shop</a>
+  <h1>🛒 Your Cart</h1>
+  <p class="subtitle" id="itemCount">0 items</p>
+
+  <div id="checkoutView">
+    <div class="card">
+      <h2>🧾 Items</h2>
+      <div id="cartItems"></div>
+      <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    </div>
+
+    <div class="card">
+      <h2>📦 Shipping Info</h2>
+      <label>Email</label>
+      <input type="email" id="email" placeholder="you@example.com" />
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="John Doe" />
+      <label>Address</label>
+      <input type="text" id="address" placeholder="123 Main St" />
+    </div>
+
+    <button class="pay-btn" id="payBtn" onclick="pay()">💳 Pay Now</button>
+  </div>
+
+  <div class="success-screen" id="successView">
+    <div class="check">✅</div>
+    <h2>Payment Successful!</h2>
+    <div class="order-num" id="orderNum">NE-000000</div>
+    <p>Your order is being processed. Thank you!</p>
+  </div>
+</div>
+
+<script>
+function loadCart(){
+  return JSON.parse(localStorage.getItem('ne_cart')||'{}');
+}
+function saveCart(c){localStorage.setItem('ne_cart',JSON.stringify(c))}
+
+function render(){
+  const cart=loadCart();
+  const items=Object.values(cart);
+  document.getElementById('itemCount').textContent=items.length+' items';
+  const container=document.getElementById('cartItems');
+  if(items.length===0){
+    container.innerHTML='<div class="cart-empty">Your cart is empty 🛒</div>';
+    document.getElementById('cartTotal').textContent='$0.00';
+    document.getElementById('payBtn').disabled=true;
+    return;
+  }
+  document.getElementById('payBtn').disabled=false;
+  container.innerHTML=items.map(i=>`
+    <div class="cart-item">
+      <span style="font-size:28px">${i.icon}</span>
+      <div class="info" style="margin-left:12px">
+        <div class="name">${i.name}</div>
+        <div class="sub">${i.desc}</div>
+        <button class="remove-btn" onclick="removeItem('${i.id}')">Remove</button>
+      </div>
+      <div class="qty-controls">
+        <button onclick="changeQty('${i.id}',-1)">−</button>
+        <span>${i.qty}</span>
+        <button onclick="changeQty('${i.id}',1)">+</button>
+      </div>
+      <div class="line-total">$${(i.price*i.qty).toFixed(2)}</div>
+    </div>
+  `).join('');
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('cartTotal').textContent='$'+total.toFixed(2);
+}
+
+function changeQty(id,delta){
+  const cart=loadCart();
+  if(!cart[id])return;
+  cart[id].qty+=delta;
+  if(cart[id].qty<=0)delete cart[id];
+  saveCart(cart);
+  render();
+}
+
+function removeItem(id){
+  const cart=loadCart();
+  delete cart[id];
+  saveCart(cart);
+  render();
+}
+
+function pay(){
+  const email=document.getElementById('email').value.trim();
+  const name=document.getElementById('name').value.trim();
+  if(!email||!name){alert('Please fill in email and name.');return;}
+  const orderNum='NE-'+Math.floor(100000+Math.random()*899999);
+  document.getElementById('orderNum').textContent=orderNum;
+  document.getElementById('checkoutView').style.display='none';
+  document.getElementById('successView').classList.add('show');
+  localStorage.removeItem('ne_cart');
+}
+
+render();
+</script>
+</body>
+</html>

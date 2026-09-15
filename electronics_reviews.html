@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reviews — NeXT Electronics</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{
+  font-family:'Inter','Segoe UI',system-ui,sans-serif;
+  background:#f0f4ff;color:#1a1a2e;padding:30px 16px;
+}
+.container{max-width:740px;margin:0 auto}
+.back-link{color:#6c5ce7;text-decoration:none;font-size:14px;display:inline-block;margin-bottom:16px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:12px}
+.header h1{font-size:28px;font-weight:900}
+.write-btn{
+  background:#6c5ce7;color:#fff;border:none;
+  padding:10px 22px;border-radius:40px;font-size:14px;font-weight:700;cursor:pointer;
+}
+.write-btn:hover{background:#5a4bd1}
+.subtitle{color:#555;font-size:15px;margin-bottom:24px}
+
+/* Write review form (hidden by default) */
+.form-card{
+  background:#fff;border:2px solid #d0d7e0;border-radius:18px;
+  padding:24px;margin-bottom:28px;box-shadow:0 4px 12px rgba(0,0,0,.04);
+  display:none;
+}
+.form-card.visible{display:block}
+.form-card label{display:block;font-size:13px;color:#555;margin-bottom:6px;font-weight:600}
+.form-card select,.form-card textarea{
+  width:100%;padding:11px 14px;border-radius:10px;
+  border:2px solid #d0d7e0;font-size:14px;margin-bottom:14px;outline:none;
+  background:#fff;
+}
+.form-card select:focus,.form-card textarea:focus{border-color:#6c5ce7}
+.form-card textarea{resize:vertical;min-height:70px}
+
+.star-selector{font-size:30px;margin-bottom:16px;user-select:none}
+.star-selector .star{
+  cursor:pointer;color:#ddd;transition:color .15s;display:inline-block;
+}
+.star-selector .star.active,.star-selector .star:hover{color:#ffc107}
+
+.submit-btn{
+  background:linear-gradient(135deg,#6c5ce7,#00cec9);color:#fff;border:none;
+  padding:12px 28px;border-radius:40px;font-size:15px;font-weight:700;cursor:pointer;
+}
+.submit-btn:hover{opacity:.88}
+.cancel-btn{
+  background:none;border:1px solid #d0d7e0;color:#555;
+  padding:12px 20px;border-radius:40px;font-size:14px;cursor:pointer;margin-left:10px;
+}
+.cancel-btn:hover{border-color:#999}
+
+/* Reviews list */
+.reviews-list h2{font-size:20px;margin-bottom:14px;border-bottom:2px solid #d0d7e0;padding-bottom:8px}
+.review-item{
+  background:#fff;border:2px solid #d0d7e0;border-radius:14px;
+  padding:14px 16px;margin-bottom:12px;
+}
+.review-item .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.review-item .product-name{font-weight:700;font-size:14px}
+.review-item .stars{color:#ffc107;font-size:15px}
+.review-item .text{font-size:13px;color:#555;line-height:1.5}
+.review-item .date{font-size:11px;color:#999;margin-top:6px}
+.no-reviews{color:#999;font-size:14px;font-style:italic;text-align:center;padding:40px 20px}
+
+footer{text-align:center;padding:24px;border-top:2px solid #d0d7e0;color:#555;font-size:13px;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="electronics_shop.html">← Back to Shop</a>
+  
+  <div class="header">
+    <h1>⭐ Customer Reviews</h1>
+    <button class="write-btn" onclick="showForm()">✍️ Write a Review</button>
+  </div>
+  <p class="subtitle">See what others say, or share your own experience.</p>
+
+  <!-- Write Review Form (hidden initially) -->
+  <div class="form-card" id="reviewForm">
+    <label>Select Product</label>
+    <select id="productSelect"></select>
+
+    <label>Your Rating</label>
+    <div class="star-selector" id="starSelector">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+
+    <label>Your Review</label>
+    <textarea id="reviewText" placeholder="Tell us about your experience..."></textarea>
+
+    <div>
+      <button class="submit-btn" onclick="submitReview()">Submit Review</button>
+      <button class="cancel-btn" onclick="hideForm()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- All Reviews -->
+  <div class="reviews-list">
+    <h2>📋 All Reviews</h2>
+    <div id="allReviews"></div>
+  </div>
+
+  <footer>© 2026 NeXT Electronics — Reviews are stored locally in your browser.</footer>
+</div>
+
+<script>
+// Product list (same ids as shop)
+const products = {
+  earbuds: [
+    {id:'eb1',icon:'🎧',name:'NeXT Buds Lite'},
+    {id:'eb2',icon:'🎧',name:'NeXT Buds Pro'},
+    {id:'eb3',icon:'🎧',name:'NeXT Buds Sport'},
+    {id:'eb4',icon:'🎧',name:'NeXT Buds Max'},
+    {id:'eb5',icon:'🎧',name:'NeXT Buds Mini'},
+  ],
+  headphones: [
+    {id:'hp1',icon:'🎧',name:'NeXT Headphones Lite'},
+    {id:'hp2',icon:'🎧',name:'NeXT Headphones Pro'},
+    {id:'hp3',icon:'🎧',name:'NeXT Headphones ANC'},
+    {id:'hp4',icon:'🎧',name:'NeXT Headphones Gaming'},
+    {id:'hp5',icon:'🎧',name:'NeXT Headphones Wireless'},
+  ],
+  tablets: [
+    {id:'tb1',icon:'📱',name:'NeXT Tab 8"'},
+    {id:'tb2',icon:'📱',name:'NeXT Tab 10"'},
+    {id:'tb3',icon:'📱',name:'NeXT Tab Pro 11"'},
+    {id:'tb4',icon:'📱',name:'NeXT Tab Mini 7"'},
+    {id:'tb5',icon:'📱',name:'NeXT Tab Ultra 12"'},
+  ],
+  computers: [
+    {id:'pc1',icon:'💻',name:'NeXT Book 13"'},
+    {id:'pc2',icon:'💻',name:'NeXT Book Pro 14"'},
+    {id:'pc3',icon:'💻',name:'NeXT Desktop Mini'},
+    {id:'pc4',icon:'💻',name:'NeXT Workstation'},
+    {id:'pc5',icon:'💻',name:'NeXT Gaming Rig'},
+  ],
+  phones: [
+    {id:'ph1',icon:'📱',name:'NeXT Phone SE'},
+    {id:'ph2',icon:'📱',name:'NeXT Phone 12'},
+    {id:'ph3',icon:'📱',name:'NeXT Phone Pro'},
+    {id:'ph4',icon:'📱',name:'NeXT Phone Ultra'},
+    {id:'ph5',icon:'📱',name:'NeXT Phone Fold'},
+  ],
+  miniPhones: [
+    {id:'mp1',icon:'📟',name:'NeXT Mini Phone 1'},
+    {id:'mp2',icon:'📟',name:'NeXT Mini Phone 2'},
+    {id:'mp3',icon:'📟',name:'NeXT Mini Phone Pro'},
+    {id:'mp4',icon:'📟',name:'NeXT Mini Phone Retro'},
+    {id:'mp5',icon:'📟',name:'NeXT Mini Phone 5G'},
+  ],
+  displays: [
+    {id:'dp1',icon:'🖥️',name:'NeXT Display 24"'},
+    {id:'dp2',icon:'🖥️',name:'NeXT Display 27"'},
+    {id:'dp3',icon:'🖥️',name:'NeXT Display 32"'},
+    {id:'dp4',icon:'🖥️',name:'NeXT Display Ultrawide'},
+    {id:'dp5',icon:'🖥️',name:'NeXT Display Portable'},
+  ],
+};
+
+const allProducts = Object.values(products).flat();
+let selectedRating = 0;
+
+// ---------- Star selector ----------
+const starEls = document.querySelectorAll('#starSelector .star');
+starEls.forEach(star=>{
+  star.addEventListener('click',()=>{
+    selectedRating = parseInt(star.dataset.value);
+    updateStars();
+  });
+});
+starEls.forEach(star=>{
+  star.addEventListener('mouseover',()=>{
+    const hoverVal = parseInt(star.dataset.value);
+    starEls.forEach(s=>{
+      s.style.color = parseInt(s.dataset.value)<=hoverVal ? '#ffc107' : '#ddd';
+    });
+  });
+});
+document.getElementById('starSelector').addEventListener('mouseleave',updateStars);
+
+function updateStars(){
+  starEls.forEach(s=>{
+    s.style.color = parseInt(s.dataset.value)<=selectedRating ? '#ffc107' : '#ddd';
+    s.classList.toggle('active',parseInt(s.dataset.value)<=selectedRating);
+  });
+}
+
+// ---------- Show/hide form ----------
+function showForm(){
+  document.getElementById('reviewForm').classList.add('visible');
+  document.getElementById('reviewForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function hideForm(){
+  document.getElementById('reviewForm').classList.remove('visible');
+}
+
+// ---------- Populate dropdown ----------
+function populateDropdown(){
+  const select = document.getElementById('productSelect');
+  select.innerHTML = '<option value="">-- Choose a product --</option>' +
+    allProducts.map(p=>`<option value="${p.id}">${p.icon} ${p.name}</option>`).join('');
+}
+
+// ---------- Reviews storage ----------
+function getReviews(){
+  return JSON.parse(localStorage.getItem('ne_reviews')||'{}');
+}
+function saveReviews(r){
+  localStorage.setItem('ne_reviews',JSON.stringify(r));
+}
+
+function submitReview(){
+  const productId = document.getElementById('productSelect').value;
+  const text = document.getElementById('reviewText').value.trim();
+  if(!productId){alert('Please select a product.');return;}
+  if(selectedRating===0){alert('Please choose a star rating.');return;}
+  if(!text){alert('Please write your review.');return;}
+
+  const r = getReviews();
+  if(!r[productId]) r[productId]=[];
+  r[productId].push({
+    productId: productId,
+    rating: selectedRating,
+    text: text,
+    date: new Date().toLocaleDateString()
+  });
+  saveReviews(r);
+
+  // Reset form
+  document.getElementById('productSelect').value='';
+  document.getElementById('reviewText').value='';
+  selectedRating=0;
+  updateStars();
+  hideForm();
+
+  renderAllReviews();
+  alert('Review submitted! Thank you.');
+}
+
+// ---------- Render all reviews ----------
+function renderAllReviews(){
+  const r = getReviews();
+  const container = document.getElementById('allReviews');
+  
+  // Collect all reviews into flat array with product info
+  const productMap = {};
+  allProducts.forEach(p=>productMap[p.id]=p);
+  
+  let allReviews = [];
+  for(const [pid, reviews] of Object.entries(r)){
+    reviews.forEach(rev => {
+      allReviews.push({
+        productId: pid,
+        rating: rev.rating,
+        text: rev.text,
+        date: rev.date
+      });
+    });
+  }
+
+  if(allReviews.length===0){
+    container.innerHTML = '<div class="no-reviews">No reviews yet. Be the first to write one!</div>';
+    return;
+  }
+
+  // Sort newest first
+  allReviews.reverse();
+
+  container.innerHTML = allReviews.map(rev=>{
+    const p = productMap[rev.productId] || {icon:'📦',name:'Unknown Product'};
+    const stars = '★'.repeat(rev.rating)+'☆'.repeat(5-rev.rating);
+    return `
+      <div class="review-item">
+        <div class="top">
+          <span class="product-name">${p.icon||''} ${p.name}</span>
+          <span class="stars">${stars}</span>
+        </div>
+        <div class="text">${rev.text}</div>
+        <div class="date">${rev.date}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+populateDropdown();
+updateStars();
+renderAllReviews();
+</script>
+</body>
+</html>
