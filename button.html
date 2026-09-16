@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Totally Legit Motivation Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Arial Black', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #282c34;
+            color: #ffffff;
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+
+        .container {
+            text-align: center;
+            background: #1e2229;
+            padding: 50px;
+            border-radius: 20px;
+            border: 4px dashed #ffcc00;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #ffcc00;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #ff0055;
+        }
+
+        .excuse-box {
+            font-size: 1.4rem;
+            min-height: 100px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            color: #00ffcc;
+        }
+
+        button {
+            background-color: #ff0055;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
+            transition: transform 0.1s ease, background 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #ff3377;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .counter {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🚨 DO NOT CLICK THIS BUTTON 🚨</h1>
+        <div class="excuse-box" id="message">
+            Seriously, clicking it won't fix your life choices. But go ahead.
+        </div>
+        <button id="roastBtn">Make Me Feel Worse</button>
+        <div class="counter" id="clickCount">Times you've ignored your responsibilities: 0</div>
+    </div>
+
+    <script>
+        const messages = [
+            "You opened this tab to procrastinate, didn't you?",
+            "Somewhere out there, a plant is producing oxygen for you, and you're wasting it on this website.",
+            "Your Wi-Fi is faster than your career progression.",
+            "Error 404: Motivation not found. (And it won't be found here either).",
+            "Go drink some water. No, seriously, stop staring at the screen like a startled owl.",
+            "At least your browser history is more interesting than your social life.",
+            "If procrastination was an Olympic sport, you’d still put off training for it.",
+            "Ah yes, clicking a button repeatedly will surely finish your laundry/homework/taxes.",
+            "Fun fact: Every time you click this, a developer sighs in a dark room.",
+            "You have 45 browser tabs open and you're reading *this*?",
+            "Look behind you. Just kidding, focus on your misery."
+        ];
+
+        const btn = document.getElementById('roastBtn');
+        const messageEl = document.getElementById('message');
+        const countEl = document.getElementById('clickCount');
+        const body = document.body;
+
+        let clicks = 0;
+
+        btn.addEventListener('click', () => {
+            clicks++;
+            
+            // Pick a random message
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            messageEl.textContent = randomMsg;
+            
+            // Update click counter
+            countEl.textContent = `Times you've ignored your responsibilities: ${clicks}`;
+
+            // Randomize background color slightly each click to cause visual mild panic
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+            body.style.background = randomColor;
+        });
+    </script>
+
+</body>
+</html>
